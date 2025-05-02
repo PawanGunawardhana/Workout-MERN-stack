@@ -55,13 +55,13 @@ userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email });
 
   if (!user) {
-    throw Error("Email is incorrect");
+    throw Error("Invalid credentials");
   }
 
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
-    throw Error("Password is incorrect");
+    throw Error("Invalid credentials");
   }
   return user;
 };
