@@ -29,6 +29,9 @@ const useLogin = () => {
     }
 
     if (response.ok) {
+      //set the user JWT to local storge
+      localStorage.setItem("user", JSON.stringify(json));
+
       //get the user JWT from local storge
       const user = localStorage.getItem("user");
       const object = JSON.parse(user);
