@@ -1,36 +1,18 @@
 import React, { useState } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
+import useSignup from "../hooks/useSignup";
 
 const Signup = () => {
-  const { dispatch } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const {signup, isLoading, success, error} = useSignup()
+
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const user = { email, password };
-    const response = await fetch("/api/user/signup", {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-    const json = await response.json();
-
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      setEmail("");
-      setPassword("");
-      setError(null);
-      dispatch({ type: "LOGIN", payload: json });
-      console.log("User Signed up successfully!", json);
-    }
+    e.preventDefault(); 
+    await signup(email, password);
   };
 
+  
   return (
     <form className="signup" onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
@@ -52,9 +34,9 @@ const Signup = () => {
         }}
         required
       />
-      <button>Sign Up</button>
+      <button disabled={isLoading}>Sign Up</button>
       {error && <div className="error">{error}</div>}
-      {!error && <div className="success">User Successfully Signed Up! </div>}
+      {success && <div className="success">User Signed Up Successfully!</div>}
     </form>
   );
 };
