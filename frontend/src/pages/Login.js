@@ -6,6 +6,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,12 +23,15 @@ const Login = () => {
 
     if (!response.ok) {
       setError(json.error);
+      setSuccess(false);
+
       console.log(response);
     }
     if (response.ok) {
       setEmail("");
       setPassword("");
       setError(null);
+      setSuccess(true);
       dispatch({ type: "LOGIN", payload: json });
       console.log(response);
       console.log("User Logged in successfully!", json);
@@ -54,8 +58,9 @@ const Login = () => {
         }}
         required
       />
-      <button>Log in</button>
+      <button>Log In</button>
       {error && <div className="error">{error}</div>}
+      {success && <div className="success">User Logged in Successfully!</div>}
     </form>
   );
 };

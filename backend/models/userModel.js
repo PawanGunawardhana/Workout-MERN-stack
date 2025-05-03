@@ -19,7 +19,6 @@ const userSchema = new Schema({
 // static signup method
 userSchema.statics.signup = async function (email, password) {
   //validation
-
   if (!email || !password) {
     throw Error("All fields must be filled!");
   }
@@ -52,16 +51,18 @@ userSchema.statics.login = async function (email, password) {
   if (!email || !password) {
     throw Error("All fields must be filled!");
   }
+  // Check whether there is a user
   const user = await this.findOne({ email });
 
   if (!user) {
-    throw Error("Invalid credentials");
+    throw Error("Email not in use,You want to Sign Up?");
   }
 
+  // comparing password whether passwords match
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
-    throw Error("Invalid credentials");
+    throw Error("Wrong Password!");
   }
   return user;
 };
